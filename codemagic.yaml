@@ -30,11 +30,6 @@ workflows:
           npx cap add ios
           npx cap copy ios
 
-          # 安装 CocoaPods 依赖（如果使用了 CocoaPods）
-          cd ios
-          pod install
-          cd ..
-
       - name: Prepare iOS environment
         script: |
           cd ios/App
