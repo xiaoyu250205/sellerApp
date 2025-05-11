@@ -20,13 +20,6 @@ workflows:
       - name: Install Capacitor and prepare iOS project
         script: |
           npm install -g @capacitor/cli
-          npx cap init "$APP_NAME" "$BUNDLE_ID" --web-dir=dist --npm-client=npm
-          npx cap add ios
-          npx cap copy ios
-
-      - name: Install Capacitor and prepare iOS project
-        script: |
-          npm install -g @capacitor/cli
           npm install @capacitor/core @capacitor/ios
 
           # 初始化 capacitor 配置，仅首次运行时需要
