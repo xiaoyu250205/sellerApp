@@ -1,0 +1,6 @@
+{
+    "appId": "com.xs.chainbuy",
+    "appName": "ChainBuy",
+    "webDir": "dist",
+    "bundledWebRuntime": false
+}
