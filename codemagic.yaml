@@ -35,6 +35,13 @@ workflows:
           pod install
           cd ..
 
+      - name: List Xcode schemes
+        script: |
+          cd ios
+          xcodebuild -list
+          cd ..
+
+
       - name: Xcode build (unsigned)
         script: |
           cd ios
