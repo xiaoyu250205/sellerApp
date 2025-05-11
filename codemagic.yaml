@@ -30,22 +30,16 @@ workflows:
           npx cap add ios
           npx cap copy ios
 
-      - name: Prepare iOS environment
-        script: |
-          cd ios/App
-          pod install --repo-update
-          cd ../..
-
       - name: Xcode build (unsigned)
         script: |
           cd ios/App
-
+          pod install --repo-update
           # 打印可用 scheme 以调试
           xcodebuild -list
 
           # 使用 App.xcodeproj 或 App.xcworkspace
           xcodebuild clean archive \
-            -project App.xcodeproj \
+            -project App.xcworkspace \
             -scheme App \
             -sdk iphoneos \
             -configuration Release \
