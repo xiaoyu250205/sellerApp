@@ -37,28 +37,28 @@ workflows:
           cd ../..
 
       - name: Xcode build (unsigned)
-      script: |
-        cd ios/App
+        script: |
+          cd ios/App
 
-        # 打印可用 scheme 以调试
-        xcodebuild -list
+          # 打印可用 scheme 以调试
+          xcodebuild -list
 
-        # 使用 App.xcodeproj 或 App.xcworkspace
-        xcodebuild clean archive \
-          -project App.xcodeproj \
-          -scheme App \
-          -sdk iphoneos \
-          -configuration Release \
-          -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-          CODE_SIGNING_ALLOWED=NO
+          # 使用 App.xcodeproj 或 App.xcworkspace
+          xcodebuild clean archive \
+            -project App.xcodeproj \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            CODE_SIGNING_ALLOWED=NO
 
-        xcodebuild -exportArchive \
-          -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-          -exportPath $CM_BUILD_DIR/build/ipa \
-          -exportOptionsPlist ../../ExportOptions.plist \
-          -allowProvisioningUpdates
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            -exportPath $CM_BUILD_DIR/build/ipa \
+            -exportOptionsPlist ../../ExportOptions.plist \
+            -allowProvisioningUpdates
 
-        cd ../..
+          cd ../..
 
     artifacts:
       - build/ipa/*.ipa
