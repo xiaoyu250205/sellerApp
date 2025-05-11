@@ -34,41 +34,34 @@ workflows:
           cd ios
           pod install
           cd ..
-
-      - name: List Xcode schemes
-        script: |
-          cd ios
-          xcodebuild -list
-          cd ..
-
-
+          
       - name: Xcode build (unsigned)
         script: |
           cd ios
-          # 如果没有 App.xcworkspace 文件，使用 .xcodeproj
-          if [ ! -f "App.xcworkspace" ]; then
+          # 如果没有 ChainBuy.xcworkspace 文件，使用 .xcodeproj
+          if [ ! -f "ChainBuy.xcworkspace" ]; then
             echo "Using .xcodeproj"
             xcodebuild clean archive \
-              -project App.xcodeproj \
-              -scheme App \
+              -project ChainBuy.xcodeproj \
+              -scheme ChainBuy \
               -sdk iphoneos \
               -configuration Release \
-              -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+              -archivePath $CM_BUILD_DIR/build/ChainBuy.xcarchive \
               CODE_SIGNING_ALLOWED=NO
           else
             echo "Using .xcworkspace"
             xcodebuild clean archive \
-              -workspace App.xcworkspace \
-              -scheme App \
+              -workspace ChainBuy.xcworkspace \
+              -scheme ChainBuy \
               -sdk iphoneos \
               -configuration Release \
-              -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+              -archivePath $CM_BUILD_DIR/build/ChainBuy.xcarchive \
               CODE_SIGNING_ALLOWED=NO
           fi
 
           # 导出 IPA 文件
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            -archivePath $CM_BUILD_DIR/build/ChainBuy.xcarchive \
             -exportPath $CM_BUILD_DIR/build/ipa \
             -exportOptionsPlist ../ExportOptions.plist \
             -allowProvisioningUpdates
