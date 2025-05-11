@@ -1,0 +1,51 @@
+workflows:
+  ios-vite-capacitor:
+    name: Build iOS IPA for ChainBuy (no signing)
+    max_build_duration: 30
+    environment:
+      vars:
+        APP_NAME: "ChainBuy"
+        BUNDLE_ID: "com.xs.chainbuy"
+      node: 18.0.0
+      xcode: latest
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+
+      - name: Build Vite project
+        script: |
+          npm run build
+
+      - name: Install Capacitor and prepare iOS project
+        script: |
+          npm install -g @capacitor/cli
+          npx cap init "$APP_NAME" "$BUNDLE_ID" --web-dir=dist --npm-client=npm
+          npx cap add ios
+          npx cap copy ios
+
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Xcode build (unsigned)
+        script: |
+          cd ios
+          xcodebuild clean archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            CODE_SIGNING_ALLOWED=NO
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            -exportPath $CM_BUILD_DIR/build/ipa \
+            -exportOptionsPlist ../ExportOptions.plist \
+            -allowProvisioningUpdates
+          cd ..
+
+    artifacts:
+      - build/ipa/*.ipa
