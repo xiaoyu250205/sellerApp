@@ -24,11 +24,18 @@ workflows:
           npx cap add ios
           npx cap copy ios
 
-      - name: Install CocoaPods
+      - name: Install Capacitor and prepare iOS project
         script: |
-          cd ios
-          pod install
-          cd ..
+          npm install -g @capacitor/cli
+          npm install @capacitor/core @capacitor/ios
+
+          # 初始化 capacitor 配置，仅首次运行时需要
+          if [ ! -f capacitor.config.ts ] && [ ! -f capacitor.config.json ]; then
+            npx cap init "ChainBuy" "com.xs.chainbuy"
+          fi
+
+          npx cap add ios
+          npx cap copy ios
 
       - name: Xcode build (unsigned)
         script: |
