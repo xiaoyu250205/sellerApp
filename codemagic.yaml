@@ -6,7 +6,7 @@ workflows:
       vars:
         APP_NAME: "ChainBuy"
         BUNDLE_ID: "com.xs.chainbuy"
-      node: 18.0.0
+      node: 22.14.0
       xcode: latest
     scripts:
       - name: Install dependencies
