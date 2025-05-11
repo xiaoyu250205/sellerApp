@@ -30,21 +30,42 @@ workflows:
           npx cap add ios
           npx cap copy ios
 
+          # 安装 CocoaPods 依赖（如果使用了 CocoaPods）
+          cd ios
+          pod install
+          cd ..
+
       - name: Xcode build (unsigned)
         script: |
           cd ios
-          xcodebuild clean archive \
-            -workspace App.xcworkspace \
-            -scheme App \
-            -sdk iphoneos \
-            -configuration Release \
-            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-            CODE_SIGNING_ALLOWED=NO
+          # 如果没有 App.xcworkspace 文件，使用 .xcodeproj
+          if [ ! -f "App.xcworkspace" ]; then
+            echo "Using .xcodeproj"
+            xcodebuild clean archive \
+              -project App.xcodeproj \
+              -scheme App \
+              -sdk iphoneos \
+              -configuration Release \
+              -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+              CODE_SIGNING_ALLOWED=NO
+          else
+            echo "Using .xcworkspace"
+            xcodebuild clean archive \
+              -workspace App.xcworkspace \
+              -scheme App \
+              -sdk iphoneos \
+              -configuration Release \
+              -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+              CODE_SIGNING_ALLOWED=NO
+          fi
+
+          # 导出 IPA 文件
           xcodebuild -exportArchive \
             -archivePath $CM_BUILD_DIR/build/App.xcarchive \
             -exportPath $CM_BUILD_DIR/build/ipa \
             -exportOptionsPlist ../ExportOptions.plist \
             -allowProvisioningUpdates
+
           cd ..
 
     artifacts:
