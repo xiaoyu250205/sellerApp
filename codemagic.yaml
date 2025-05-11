@@ -32,6 +32,7 @@ workflows:
 
       - name: Xcode build (unsigned)
         script: |
+          ls -al ios/App
           cd ios/App
           pod install --repo-update
           # 打印可用 scheme 以调试
